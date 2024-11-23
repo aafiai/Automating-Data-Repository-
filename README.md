@@ -17,6 +17,7 @@ Outcome: The macro successfully extracted and saved the new rows in a new workbo
 3. Save New Workbook with "NEW" Prefix
 Task: Modify the previously written macro to save the new workbook with "NEW_" added to the name of today’s file, followed by "_Additions" and the current date.
 Outcome: We successfully updated the code to save the new file with the desired naming convention (e.g., NEW_TodaysFile_Additions_dd-mmm-yyyy.xlsx).
+
 Key Highlights:
 Error Handling: We used error handling (On Error Resume Next) to ensure no interruptions occurred during data processing, especially when checking the uniqueness of values in Column A.
 Workbook Operations: Operations like copying rows, freezing panes, and writing formulas were included.
