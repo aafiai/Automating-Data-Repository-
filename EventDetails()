@@ -1,0 +1,165 @@
+Sub EventDetails()
+
+    Dim csvFile As Variant
+
+    Dim wb As Workbook
+
+    Dim ws As Worksheet
+
+    Dim saveAsPath As String
+
+    Dim fileName As String
+
+    Dim currentDate As String
+
+    Dim rng As Range
+
+    Dim cell As Range
+
+    Dim yearVal As Integer
+
+    Dim newDate As Date
+
+ 
+
+    ' Ask user to select a CSV file
+
+    csvFile = Application.GetOpenFilename("CSV Files (*.csv), *.csv", , "Select CSV File")
+
+   
+
+    ' Exit if no file selected
+
+    If csvFile = False Then Exit Sub
+
+   
+
+    ' Open the selected CSV file
+
+    Set wb = Workbooks.Open(fileName:=csvFile)
+
+    Set ws = wb.Sheets(1)
+
+   
+
+    ' Freeze the top row and first column (Freeze Panes at B2)
+
+    ws.Range("B2").Select
+
+    ActiveWindow.FreezePanes = True
+
+   
+
+    ' Enable filters on the first row
+
+    ws.Rows(1).AutoFilter
+
+   
+
+    ' Select cell A1 to remove highlight from any other cell
+
+    ws.Range("A1").Select
+
+   
+
+    ' Apply conditional formatting to highlight duplicates in Column A
+
+    Set rng = ws.Range("A2:A" & ws.Cells(ws.Rows.Count, "A").End(xlUp).Row) ' Dynamic range for Column A
+
+    With rng
+
+        .FormatConditions.AddUniqueValues
+
+        .FormatConditions(.FormatConditions.Count).SetFirstPriority
+
+        .FormatConditions(1).DupeUnique = xlDuplicate
+
+        .FormatConditions(1).Interior.Color = RGB(255, 199, 206) ' Light Red Fill for duplicates
+
+    End With
+
+ 
+
+    ' Update the years in Columns Y, Z, AA, AB
+
+    Dim cols As Variant
+
+    Dim col As Variant
+
+    Dim dateValue As Date
+
+    cols = Array("Y", "Z", "AA", "AB") ' The columns to process
+
+ 
+
+    For Each col In cols
+
+        Set rng = ws.Range(col & "2:" & col & ws.Cells(ws.Rows.Count, col).End(xlUp).Row)
+
+        For Each cell In rng
+
+            If IsDate(cell.Value) Then
+
+                ' Extract the year part
+
+                dateValue = cell.Value
+
+                yearVal = Year(dateValue)
+
+               
+
+                ' If year is between 1930 and 1985, adjust by 100 years
+
+                If yearVal >= 1930 And yearVal <= 1985 Then
+
+                    ' Create a new date with the adjusted year
+
+                    newDate = DateSerial(yearVal + 100, Month(dateValue), Day(dateValue))
+
+                    cell.Value = newDate ' Update the cell with the new date
+
+                End If
+
+            End If
+
+        Next cell
+
+    Next col
+
+   
+
+    ' Get the file name without the extension
+
+    fileName = Mid(csvFile, InStrRev(csvFile, "\") + 1, InStrRev(csvFile, ".") - InStrRev(csvFile, "\") - 1)
+
+   
+
+    ' Get the current date in "8th October 2024" format
+
+    currentDate = Day(Date) & Format(Day(Date), "\t\h") & " " & Format(Date, "mmmm yyyy")
+
+   
+
+    ' Construct the new file path with the same name, today's date, and .xlsb extension
+
+    saveAsPath = Left(csvFile, InStrRev(csvFile, "\")) & fileName & " - " & currentDate & ".xlsb"
+
+   
+
+    ' Save the file as Binary format (XLSB)
+
+    wb.SaveAs fileName:=saveAsPath, FileFormat:=xlExcel12
+
+   
+
+    ' Close the workbook (saving is already done)
+
+    wb.Close SaveChanges:=False
+
+   
+
+    MsgBox "Event Details File is ready -> with freeze panes, filters, duplicate highlighting, and year updates applied.", vbInformation
+
+End Sub
+
+ 
