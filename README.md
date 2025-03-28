@@ -55,7 +55,13 @@ This macro automates the process of converting a CSV file into a binary Excel fi
 
 
 
+
+
+
+
+
 **Routine EventDetails()**
+
 *The VBA code you provided is a subroutine named EventDetails(), which performs several operations on a CSV file that the user selects. Here's a breakdown of what the code does:*
 
 1. File Selection: The code prompts the user to select a CSV file. If no file is selected, the subroutine exits.
@@ -81,6 +87,13 @@ This macro automates the process of converting a CSV file into a binary Excel fi
 
 
 This code is useful for processing event details stored in CSV format, applying specific formatting and data transformations, and saving the results in a more efficient binary format.
+
+
+
+
+
+
+
 
 
 
@@ -140,6 +153,10 @@ This script automates data transformation tasks and ensures that the output file
 
 
 
+
+
+
+
 **Routine SortCSVDescending()**
 
 *The VBA macro is designed to automate the process of selecting a CSV file, sorting its data, and saving it as an Excel Binary Workbook (.xlsb) with a date-stamped file name. Below is a breakdown of its functionality:*
@@ -181,6 +198,7 @@ Displays a message box confirming the operation and showing the path of the save
 
 
 **Routine NEWRECORDSCompareColumnAAndExtractAdditions()**
+
 *This VBA macro is designed to compare two Excel files, specifically focusing on the values in Column A. The goal is to identify and extract entries from today's file (`todaysFile`) that are not present in yesterday's file (`yesterdaysFile`). The extracted entries are then saved in a new Excel workbook.*
 
  
