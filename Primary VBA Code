@@ -1,0 +1,91 @@
+Sub SelectAndConvertCSV()
+
+    Dim csvFile As Variant
+
+    Dim wb As Workbook
+
+    Dim ws As Worksheet
+
+    Dim saveAsPath As String
+
+    Dim fileName As String
+
+    Dim currentDate As String
+
+   
+
+    ' Ask user to select a CSV file
+
+    csvFile = Application.GetOpenFilename("CSV Files (*.csv), *.csv", , "Select CSV File")
+
+   
+
+    ' Exit if no file selected
+
+    If csvFile = False Then Exit Sub
+
+   
+
+    ' Open the selected CSV file
+
+    Set wb = Workbooks.Open(fileName:=csvFile)
+
+    Set ws = wb.Sheets(1)
+
+   
+
+    ' Freeze the top row
+
+    ws.Rows("2:2").Select
+
+    ActiveWindow.FreezePanes = True
+
+   
+
+    ' Enable filters on the first row
+
+    ws.Rows(1).AutoFilter
+
+   
+
+    ' Select cell A1 to remove highlight from any other cell
+
+    ws.Range("A1").Select
+
+   
+
+    
+
+        ' Get the file name without the extension
+
+    fileName = Mid(csvFile, InStrRev(csvFile, "\") + 1, InStrRev(csvFile, ".") - InStrRev(csvFile, "\") - 1)
+
+   
+
+    ' Get the current date in "8th October 2024" format
+
+    currentDate = Day(Date) & Format(Day(Date), "\t\h") & " " & Format(Date, "mmmm yyyy")
+
+   
+
+    ' Construct the new file path with the same name, today's date, and .xlsb extension
+
+    saveAsPath = Left(csvFile, InStrRev(csvFile, "\")) & fileName & " - " & currentDate & ".xlsb"
+
+   
+
+    ' Save the file as Binary format (XLSB)
+
+    wb.SaveAs fileName:=saveAsPath, FileFormat:=xlExcel12
+
+   
+
+    ' Close the workbook (saving is already done)
+
+    wb.Close SaveChanges:=False
+
+   
+
+    MsgBox "The file has been successfully converted and saved as: " & saveAsPath, vbInformation
+
+End Sub
